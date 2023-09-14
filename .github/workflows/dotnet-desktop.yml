@@ -24,7 +24,7 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Publish
-      run: dotnet publish */*.csproj -c Release -o Console
+      run: dotnet publish UnitTestingandGithub/UnitTestingandGithub.csproj -c Release -o Console
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
       with:
