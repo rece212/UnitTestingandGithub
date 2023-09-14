@@ -24,11 +24,10 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Publish
-      run: dotnet publish  **/UnitTestingandGithub.csproj -c Release -o
+      run: dotnet publish UnitTestingandGithub/UnitTestingandGithub.csproj -c Release --os win-x64 --output Console
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
       with:
         name: console
-        path: $**/**/bin/Release/*.*
+        path: D:\a\UnitTestingandGithub\UnitTestingandGithub\UnitTestingandGithub\bin\Release\**
         if-no-files-found: error
-
