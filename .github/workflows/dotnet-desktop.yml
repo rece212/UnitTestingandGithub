@@ -29,6 +29,6 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: console
-        path: SimpleUnitTest/Console/**
+        path: UnitTestingandGithub/Console/**
         if-no-files-found: error
 
