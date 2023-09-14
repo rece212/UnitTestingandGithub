@@ -1,36 +1,34 @@
-name: Tests
+name: .NET
 
-on: push
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-  tests:
-    name: Unit Testing
+  build:
+
     runs-on: windows-latest
+
     steps:
-      - uses: actions/checkout@v2.1.0
-      - run: dotnet test
-      - run: dotnet publish -c Release -r win-x64 -p:PublishReadyToRun=true
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-      - name: Zip the Build
-        run: zip -r ${{ secrets.ReleaseZipName }} ./AppName/bin/Release/netcoreapp3.1/ 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.run_number }}
-          release_name: Release ${{ github.ref }}
-          body: New Release.
-          draft: false
-          prerelease: false
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./${{ secrets.ReleaseZipName }}.zip
-          asset_name: ${{ secrets.ReleaseZipName }}.zip
-          asset_content_type: application/zip
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+    - name: Publish
+      run: dotnet publish */*.csproj -c Release -o Console
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: console
+        path: SimpleUnitTest/Console/**
+        if-no-files-found: error
+
