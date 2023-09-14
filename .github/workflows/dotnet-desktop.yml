@@ -29,5 +29,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: console
-        path: D:\a\UnitTestingandGithub\UnitTestingandGithub\UnitTestingandGithub\bin\Release\**.exe
+        path: D:\a\UnitTestingandGithub\UnitTestingandGithub\UnitTestingandGithub\bin\Release\**\**.exe
         if-no-files-found: error
